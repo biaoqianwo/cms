@@ -1,0 +1,65 @@
+<extend name="Public:front"/>
+<block name="mianbaoxie">
+    <li><a href="{:U('Permission/index')}">权限</a></li>
+    <if condition="has_permission('Permission/add')">
+        <li><a href="{:U('Permission/add')}">添加</a></li>
+    </if>
+    <li><a class="collapsed glyphicon glyphicon-question-sign " role="button" data-toggle="collapse"
+           href="#collapse1" aria-expanded="false" aria-controls="collapse1"></a></li>
+</block>
+<block name="main">
+    <div class="collapse" id="collapse1" aria-expanded="false">
+        <div class="alert alert-danger">
+            <p>如果您不知道下面功能的含义，切勿操作！！！</p>
+        </div>
+        <div class="alert alert-info">
+            <p>权限显示：表示在角色的权限树形结构中显示；菜单显示：表示在导航菜单中显示</p>
+
+            <p>URL不允许编辑，如果书写错误，请删除重新添加。</p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>父级</th>
+                <th>名称</th>
+                <th>URL</th>
+                <th>菜单显示</th>
+                <th>权限显示</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="datas" id="vo">
+                <tr>
+                    <td>{$vo.fuji}</td>
+                    <td>{$vo.mingcheng}</td>
+                    <td>{$vo.url}</td>
+                    <td>
+                        <eq name="vo.caidanxianshi" value="1">显示
+                            <else/>
+                            隐藏
+                        </eq>
+                    </td>
+                    <td>
+                        <eq name="vo.quanxianxianshi" value="1">显示
+                            <else/>
+                            隐藏
+                        </eq>
+                    </td>
+                    <td>
+                        <if condition="has_permission('Permission/edit')">
+                            <a href="{:U('Permission/edit',array('id'=>$vo['id']))}">编辑</a>
+                        </if>
+                        <if condition="has_permission('Permission/delete')">
+                            <a class="ajax-get confirm no-refresh"
+                               href="{:U('Permission/delete',array('id'=>$vo['id']))}" remove="tr">删除</a>
+                        </if>
+                    </td>
+                </tr>
+            </volist>
+            </tbody>
+        </table>
+    </div>
+</block>

@@ -1,0 +1,103 @@
+/*直角*/
+body{
+    font-family:"microsoft yahei";
+    padding-top: 70px;
+}
+.btn, .form-control, .webuploader-pick, .thumbnail, .navbar-toggle, .panel, .breadcrumb, .bootstrap-switch, .bootstrap-switch .bootstrap-switch-handle-on, .bootstrap-switch .bootstrap-switch-handle-off
+,.alert,.well{
+    border-radius: 0 !important;
+}
+
+.border-bottom {
+    border-bottom: solid 1px #ddd;
+}
+.margin-bottom {
+    margin-bottom: 20px;
+}
+.margin-right{
+    margin-right: 5px;
+}
+
+.zhuti {
+    width: 30px;
+    height: 20px;
+    display: inline-block;
+    white-space: nowrap;
+    line-height: 35px;
+    vertical-align: middle;
+}
+
+.red {
+    background-color: #f33;
+}
+
+.golden {
+    background-color: #f93
+}
+
+.webuploader-container {
+    position: relative;
+}
+
+.webuploader-element-invisible {
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+.webuploader-pick {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    background: #00b7ee;
+    padding: 10px 15px;
+    color: #fff;
+    text-align: center;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.webuploader-pick-hover {
+    background: #00a2d4;
+}
+
+.webuploader-pick-disable {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/*dtree*/
+.dtree {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #666;
+    white-space: nowrap;
+}
+
+.dtree img {
+    border: 0px;
+    vertical-align: middle;
+}
+
+.dtree a {
+    color: #333;
+    text-decoration: none;
+}
+
+.dtree a.node, .dtree a.nodeSel {
+    white-space: nowrap;
+    padding: 1px 2px 1px 2px;
+}
+
+.dtree a.node:hover, .dtree a.nodeSel:hover {
+    color: #333;
+    text-decoration: underline;
+}
+
+.dtree a.nodeSel {
+    background-color: #c0d2ec;
+}
+
+.dtree .clip {
+    overflow: hidden;
+}

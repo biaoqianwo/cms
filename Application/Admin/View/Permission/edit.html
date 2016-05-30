@@ -1,0 +1,85 @@
+<extend name="Public:front"/>
+<block name="mianbaoxie">
+    <li><a href="{:U('Permission/index')}">权限</a></li>
+</block>
+<block name="main">
+    <form method="post" class="form-horizontal" enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">父级*</label>
+
+            <div class="col-sm-10">
+                <select name="fuji" class="form-control">
+                    <volist name="datas" id="vo">
+                        <option value="{$vo.id}"
+                        <eq name="data.fuji" value="$vo.id">selected</eq>
+                        >{$vo.mingcheng}</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">名称*</label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="mingcheng" placeholder="名称" required
+                       value="{$data.mingcheng}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">URL*</label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="url" placeholder="URL" value="{$data.url}">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">菜单显示</label>
+
+            <div class="col-sm-10">
+                <label class="radio-inline">
+                    <input type="radio" name="caidanxianshi" value="1"
+                    <eq name="data.caidanxianshi" value="1">checked</eq>
+                    > 开启
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="caidanxianshi" value="0"
+                    <eq name="data.caidanxianshi" value="0">checked</eq>
+                    > 关闭
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">权限显示</label>
+
+            <div class="col-sm-10">
+                <label class="radio-inline">
+                    <input type="radio" name="quanxianxianshi" value="1"
+                    <eq name="data.quanxianxianshi" value="1">checked</eq>
+                    > 开启
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="quanxianxianshi" value="0"
+                    <eq name="data.quanxianxianshi" value="0">checked</eq>
+                    > 关闭
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">排序</label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="paixu" placeholder="排序" value="{$data.paixu}">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="hidden" name="id" value="{$data.id}">
+                <button type="submit" class="btn btn-primary btn-block">提交</button>
+            </div>
+        </div>
+    </form>
+</block>

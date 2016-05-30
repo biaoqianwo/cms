@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>出错了</title>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background: #fff;
+            font-family: '微软雅黑';
+            color: #333;
+            font-size: 16px;
+        }
+
+        .alert {
+            text-align: center;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+        }
+
+        .alert-danger {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 0;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: normal;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+
+        .btn-primary:focus,
+        .btn-primary.focus {
+            color: #fff;
+            background-color: #286090;
+            border-color: #122b40;
+        }
+
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #286090;
+            border-color: #204d74;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div style="min-width: 200px;max-width:600px;margin: 100px auto;">
+    <div class="alert alert-danger" role="alert">
+        <strong>出错了!</strong> 该页面不存在,或已被删除
+    </div>
+    <a id="href" class="btn btn-primary btn-block"
+       href="http://<?php echo $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME'];?>">等待:<b id="wait">3</b>秒.跳至首页</a>
+</div>
+<script type="text/javascript">
+    (function () {
+        var wait = document.getElementById('wait'), href = document.getElementById('href').href;
+        var interval = setInterval(function () {
+            var time = --wait.innerHTML;
+            if (time <= 0) {
+                location.href = href;
+                clearInterval(interval);
+            }
+        }, 1000);
+    })();
+</script>
+</body>
+</html>

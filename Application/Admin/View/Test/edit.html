@@ -1,0 +1,93 @@
+<extend name="Public:front"/>
+<block name="mianbaoxie">
+    <li><a href="{:U('Test/index')}">ceshi</a></li>
+</block>
+<block name="main">
+    <form data-toggle="validator" method="post" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">关联表*</label>
+
+            <div class="col-sm-10">
+                <select name="manage_name" class="form-control" required>
+                    <option value="">--选择--</option>
+                    <volist name="manages" id="vo">
+                        <option value="{$vo.code}"
+                        <eq name="vo.code" value="$data.manage_code">selected</eq>
+                        >{$vo.code}</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">字符串*</label>
+
+            <div class="col-sm-10">
+                <input name="zifuchuan" type="text" class="form-control" placeholder="字符串" required
+                       value="{$data.zifuchuan}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">日期*</label>
+
+            <div class="col-sm-10">
+                <input name="riqi" type="text" class="form-control datetimepicker" placeholder="日期"
+                       data-date-format="yyyy-mm-dd" required value='{$data.riqi}'>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">数字*</label>
+
+            <div class="col-sm-10">
+                <input name="shuzi" type="text" class="form-control" placeholder="数字" required value="{$data.shuzi}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">主图*</label>
+
+            <div class="col-sm-10">
+                <div id="zhutu" class="pull-left">选择图片</div>
+                <div id="zhutu_file_list" class="pull-left"></div>
+                <notempty name="data.zhutu">
+                    <div class="pull-left thumbnail">
+                        <img src="__PUBLIC__/Uploads/Test/{$data.zhutu}" style="height:100px;">
+                        <input name="zhutu" value="{$data.zhutu}" type="hidden">
+
+                        <div class="remove-img btn-warning" data-src="./Public/Uploads/Test/{$data.zhutu}"
+                             data-name="zhutu">移除
+                        </div>
+                    </div>
+                </notempty>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">文本</label>
+
+            <div class="col-sm-10">
+                <textarea name="wenben" class="form-control" placeholder="文本" required>{$data.wenben}</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">富文本</label>
+
+            <div class="col-sm-10">
+                <script type="text/plain" id="editor1" style="width:100%;" name="fuwenben" required>{$data.fuwenben}</script>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"></label>
+
+            <div class="col-sm-10">
+                <input type="hidden" name="id" value="{$data.id}">
+                <input class="btn  btn-primary btn-block" type="submit" value="提交">
+            </div>
+        </div>
+    </form>
+
+</block>
+

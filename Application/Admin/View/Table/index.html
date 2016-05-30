@@ -1,0 +1,49 @@
+<extend name="Public:front"/>
+<block name="mianbaoxie">
+    <li class="active">模型管理</li>
+    <if condition="has_permission('Table/add')">
+        <li><a href="{:U('Table/add')}">添加</a></li>
+    </if>
+    <li><a class="collapsed glyphicon glyphicon-question-sign " role="button" data-toggle="collapse"
+           href="#collapse1" aria-expanded="false" aria-controls="collapse1"></a></li>
+</block>
+<block name="main">
+    <div class="collapse" id="collapse1" aria-expanded="false">
+        <div class="alert alert-info">
+            <p>模型(即表)是数据存储的格式</p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>表名</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="datas" id="vo">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.mingcheng}</td>
+                    <td>{$vo.biaoming}</td>
+                    <td>
+                        <if condition="has_permission('Table/edit')">
+                            <a href="{:U('Table/edit',array('id'=>$vo['id']))}">编辑</a>
+                        </if>
+                        <if condition="has_permission('Table/delete')">
+                            <a class="ajax-get confirm no-refresh"
+                               href="{:U('Table/delete',array('id'=>$vo['id']))}" remove="tr">删除</a>
+                        </if>
+                        <if condition="has_permission('TableField/add')">
+                            <a href="{:U('TableField/add',array('table_biaoming'=>$vo['biaoming']))}">添加字段</a>
+                        </if>
+                    </td>
+                </tr>
+            </volist>
+            </tbody>
+        </table>
+    </div>
+</block>

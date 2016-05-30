@@ -1,0 +1,9 @@
+<extend name="Public:front"/>
+<block name="main">
+
+    <div>主面板展示父极权限为根的权限项</div>
+    <volist name="menus" id="vo">
+        <h2><a href="{$vo.href}">{$vo.mingcheng}</a></h2>
+    </volist>
+    <h2><a href="{:U('test/index')}">ceshi</a></h2>
+</block>
