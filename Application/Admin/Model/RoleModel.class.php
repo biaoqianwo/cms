@@ -3,6 +3,6 @@ namespace Admin\Model;
 
 use Think\Model;
 
-class PermissionModel extends CommonModel
+class RoleModel extends CommonModel
 {
 }

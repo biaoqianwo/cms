@@ -1,20 +1,23 @@
-/*直角*/
-body{
-    font-family:"microsoft yahei";
-    padding-top: 70px;
+body {
+    font-family: "microsoft yahei";
+    padding-top: 10px;
+    padding-bottom: 70px;
 }
-.btn, .form-control, .webuploader-pick, .thumbnail, .navbar-toggle, .panel, .breadcrumb, .bootstrap-switch, .bootstrap-switch .bootstrap-switch-handle-on, .bootstrap-switch .bootstrap-switch-handle-off
-,.alert,.well{
+
+/*直角*/
+.btn, .form-control, .webuploader-pick, .thumbnail, .navbar-toggle, .panel, .breadcrumb, .bootstrap-switch, .bootstrap-switch .bootstrap-switch-handle-on, .bootstrap-switch .bootstrap-switch-handle-off, .alert, .well, .pagination, .pagination > li:first-child > a, .pagination > li:first-child > span, .pagination > li:last-child > a, .pagination > li:last-child > span {
     border-radius: 0 !important;
 }
 
 .border-bottom {
     border-bottom: solid 1px #ddd;
 }
+
 .margin-bottom {
     margin-bottom: 20px;
 }
-.margin-right{
+
+.margin-right {
     margin-right: 5px;
 }
 

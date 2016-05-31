@@ -1,18 +1,11 @@
 <extend name="Public:front"/>
 <block name="mianbaoxie">
-    <li class="active">模型管理</li>
+    <li><a href="{:U('Table/index')}">模型</a></li>
     <if condition="has_permission('Table/add')">
         <li><a href="{:U('Table/add')}">添加</a></li>
     </if>
-    <li><a class="collapsed glyphicon glyphicon-question-sign " role="button" data-toggle="collapse"
-           href="#collapse1" aria-expanded="false" aria-controls="collapse1"></a></li>
 </block>
 <block name="main">
-    <div class="collapse" id="collapse1" aria-expanded="false">
-        <div class="alert alert-info">
-            <p>模型(即表)是数据存储的格式</p>
-        </div>
-    </div>
     <div class="table-responsive">
         <table class="table table-striped table-hover table-bordered">
             <thead>

@@ -15,8 +15,8 @@ class TableModel extends Model
     {
         if ($params['id']) {
             $data = $this->find($params['id']);
-        }elseif($params['biaoming']){
-            $data = $this->where(['biaoming'=>$params['biaoming']])->find();
+        } elseif ($params['biaoming']) {
+            $data = $this->where(['biaoming' => $params['biaoming']])->find();
         }
         $data['fields'] = D('Admin/TableField')->getAll(['table_biaoming' => $params['biaoming']]);
         return $data;
@@ -84,10 +84,11 @@ class TableModel extends Model
         } else {
             $rs['status'] = 1;
             $rs['id'] = $id;
-            $rs['info'] = '新增' . $params['biaoming'];
+            $rs['info'] = '新增' . $this->getTableName();
 
             $params['id'] = $rs['id'];
-            $this->newtable($params);
+            $this->createTable($params);
+            $this->insertTableField($params);
             $this->newMVC($params);
             $this->insertPermission($params);
 
@@ -96,11 +97,34 @@ class TableModel extends Model
     }
 
     //新增表
-    protected function newtable($params)
+    protected function createTable($params)
     {
         $table = C('DB_PREFIX') . $params['biaoming'];
-        $sql = "CREATE TABLE `{$table}` (`id` INT NOT NULL AUTO_INCREMENT,`code` VARCHAR(50) NOT NULL,`created_at` INT NOT NULL DEFAULT '0',`updated_at` INT NOT NULL DEFAULT '0',`deleted_at` INT NOT NULL DEFAULT '0',PRIMARY KEY (`id`)) COMMENT='" . $params['mingcheng'] . "' COLLATE='utf8_general_ci' ENGINE=InnoDB;";
+        $sql = "CREATE TABLE `{$table}` (`id` INT NOT NULL AUTO_INCREMENT,`created_at` INT NOT NULL DEFAULT '0',`updated_at` INT NOT NULL DEFAULT '0',`deleted_at` INT NOT NULL DEFAULT '0',PRIMARY KEY (`id`)) COMMENT='" . $params['mingcheng'] . "' COLLATE='utf8_general_ci' ENGINE=InnoDB;";
         $this->execute($sql);
+    }
+
+    protected function insertTableField($params)
+    {
+        $table = C('DB_PREFIX') . 'table_field';
+        $table_biaoming = $params['biaoming'];
+        $time = time();
+
+        //主键ID
+        $sql = "INSERT INTO `{$table}` (`table_biaoming`, `ziduanming`, `ziduanming_pinyin`, `leixing`, `weiyi`, `bitian`,`chaxunxianshi`,`liebiaoxianshi`,`created_at`,`updated_at`) VALUES ('{$table_biaoming}', '主键ID', 'id', 'int', 1, 0,1,0,{$time},{$time});";
+        $this->execute($sql);
+
+        $defaultField = [
+            ['ziduanming' => 'created_at', 'comment' => '插入时间'],
+            ['ziduanming' => 'updated_at', 'comment' => '更新时间'],
+            ['ziduanming' => 'deleted_at', 'comment' => '删除时间'],
+        ];
+        foreach ($defaultField as $v) {
+            $ziduanming = $v['ziduanming'];
+            $comment = $v['comment'];
+            $sql = "INSERT INTO `{$table}` (`table_biaoming`, `ziduanming`, `ziduanming_pinyin`, `leixing`, `weiyi`, `bitian`,`chaxunxianshi`,`liebiaoxianshi`,`created_at`,`updated_at`) VALUES ('{$table_biaoming}', '{$comment}', '{$ziduanming}', 'int', 0, 0,0,0,{$time},{$time});";
+            $this->execute($sql);
+        }
     }
 
     //新增MVC文件
@@ -226,10 +250,10 @@ eod;
         $data = ['fuji' => 0, 'mingcheng' => $params['mingcheng'] . '管理', 'url' => $name . '/index', 'caidanxianshi' => 1, 'quanxianxianshi' => 1];
         $rs = D('Admin/Permission')->insert($data);
         if ($rs['status']) {
-            $datas[] = ['fuji' => $params['mingcheng'] . '管理', 'mingcheng' => $params['mingcheng'] . '查看', 'url' => $name . '/view', 'caidanxianshi' => 0, 'quanxianxianshi' => 1];
-            $datas[] = ['fuji' => $params['mingcheng'] . '管理', 'mingcheng' => $params['mingcheng'] . '添加', 'url' => $name . '/add', 'caidanxianshi' => 0, 'quanxianxianshi' => 1];
-            $datas[] = ['fuji' => $params['mingcheng'] . '管理', 'mingcheng' => $params['mingcheng'] . '编辑', 'url' => $name . '/edit', 'caidanxianshi' => 0, 'quanxianxianshi' => 1];
-            $datas[] = ['fuji' => $params['mingcheng'] . '管理', 'mingcheng' => $params['mingcheng'] . '删除', 'url' => $name . '/delete', 'caidanxianshi' => 0, 'quanxianxianshi' => 1];
+            $datas[] = ['fuji' => $params['mingcheng'] . '管理', 'mingcheng' => $params['mingcheng'] . '查看', 'url' => $name . '/view', 'caidanxianshi' => 0, 'quanxianxianshi' => 1, 'created_at' => time(), 'updated_at' => time()];
+            $datas[] = ['fuji' => $params['mingcheng'] . '管理', 'mingcheng' => $params['mingcheng'] . '添加', 'url' => $name . '/add', 'caidanxianshi' => 0, 'quanxianxianshi' => 1, 'created_at' => time(), 'updated_at' => time()];
+            $datas[] = ['fuji' => $params['mingcheng'] . '管理', 'mingcheng' => $params['mingcheng'] . '编辑', 'url' => $name . '/edit', 'caidanxianshi' => 0, 'quanxianxianshi' => 1, 'created_at' => time(), 'updated_at' => time()];
+            $datas[] = ['fuji' => $params['mingcheng'] . '管理', 'mingcheng' => $params['mingcheng'] . '删除', 'url' => $name . '/delete', 'caidanxianshi' => 0, 'quanxianxianshi' => 1, 'created_at' => time(), 'updated_at' => time()];
             D('Admin/Permission')->addAll($datas);
         }
     }
@@ -259,7 +283,7 @@ eod;
         } else {
             $rs['status'] = 1;
             $rs['id'] = $params['id'];
-            $rs['info'] = '修改' . $params['biaoming'];
+            $rs['info'] = '修改' . $this->getTableName();
             //ALTER TABLE `cms_test` COMMENT='测试2表';
             //RENAME TABLE `cms_test` TO `cms_test2`;
             return $rs;
@@ -267,18 +291,18 @@ eod;
     }
 
     //删除
-    public function deleteOne($id)
+    public function deleteOne($params)
     {
         $rs = array('status' => 0, 'id' => 0, 'info' => '删除失败');
         $data = array('deleted_at' => NOW_TIME, 'updated_at' => NOW_TIME);
-        $status = $this->where(array('id' => $id))->save($data);
+        $status = $this->where(array('id' => $params['id']))->save($data);
         if (!$status) {
             $rs['info'] = $this->getError();
             return $rs;
         } else {
             $rs['status'] = 1;
-            $rs['id'] = $id;
-            $rs['info'] = '删除成功';
+            $rs['id'] = $params['id'];
+            $rs['info'] = '删除' . $this->getTableName();
             return $rs;
         }
     }

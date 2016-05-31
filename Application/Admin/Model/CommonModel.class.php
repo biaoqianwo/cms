@@ -13,36 +13,16 @@ class CommonModel extends Model
 
     public $tableFields = [];
 
+    //初始化
     protected function _initialize()
     {
-        //考虑缓存
-        $this->tableFields = D('Admin/TableField')->where(['table_biaoming' => strtolower($this->getModelName())])->select();
-    }
-
-    //结果格式化
-    protected function resultFormat($data)
-    {
-        $fields = $this->tableFields;
-        foreach ($fields as $field) {
-            switch ($field['leixing']) {
-                case 'date':
-                    $data[$field['ziduanming_pinyin']] = date('Y-m-d', $data[$field['ziduanming_pinyin']]);
-                    break;
-                case 'img':
-                    //图片地址
-                    //$data[$field['ziduanming_pinyin'] . '_url'] = '/Public/Uploads/' . $this->getModelName() . '/' . $data[$field['ziduanming_pinyin']];
-                    break;
-                case 'text':
-                    $data[$field['ziduanming_pinyin']] = htmlspecialchars_decode($data[$field['ziduanming_pinyin']]);
-                    break;
-                case 'longtext':
-                    $data[$field['ziduanming_pinyin']] = htmlspecialchars_decode($data[$field['ziduanming_pinyin']]);
-                    break;
-                default:
-                    ;
-            }
+        $table_biaoming = strtolower($this->getModelName());
+        if (S('tablefield_' . $table_biaoming)) {
+            $data = S('tablefield_' . $table_biaoming);
+        } else {
+            $data = D('Admin/TableField')->where(['table_biaoming' => $table_biaoming])->select();
         }
-        return $data;
+        $this->tableFields = $data;
     }
 
     //组装wheret条件
@@ -80,46 +60,27 @@ class CommonModel extends Model
         return $where;
     }
 
-    //查询一条记录
-    public function getOne($params)
+    //结果格式化
+    protected function resultFormat($data)
     {
-        if ($params['id']) {
-            $data = $this->find($params['id']);
-        } else if ($params['mingcheng']) {
-            $data = $this->where(['mingcheng' => $params['mingcheng']])->find();
-        } else if ($params['biaoti']) {
-            $data = $this->where(['biaoti' => $params['biaoti']])->find();
-        } else if ($params['code']) {
-            $data = $this->where(['code' => $params['code']])->find();
-        } else {
-            return [];
+        $fields = $this->tableFields;
+        foreach ($fields as $field) {
+            switch ($field['leixing']) {
+                case 'date':
+                    $data[$field['ziduanming_pinyin']] = date('Y-m-d', $data[$field['ziduanming_pinyin']]);
+                    break;
+                case 'img':
+                    //$data[$field['ziduanming_pinyin'] . '_url'] = '/Public/Uploads/' . $this->getModelName() . '/' . $data[$field['ziduanming_pinyin']];
+                    break;
+                case 'text':
+                case 'longtext':
+                    $data[$field['ziduanming_pinyin']] = htmlspecialchars_decode($data[$field['ziduanming_pinyin']]);
+                    break;
+                default:
+                    ;
+            }
         }
-        $data = $this->resultFormat($data);
         return $data;
-    }
-
-
-    //查询多条记录
-    public function getAll($params = [])
-    {
-        $limit = $params['limit'] > 0 ? $params['limit'] : 20;
-        $page = $params['page'] > 0 ? ($params['page'] - 1) * $limit : -1;
-        $where = $this->geneWhere($params);
-        $order = $params['order'] ? $params['order'] : 'id desc';
-        $datas = $this->where($where)->order($order);
-        $datas = $page >= 0 ? $datas->limit($page, $limit)->select() : $datas->select();
-        foreach ($datas as &$data) {
-            //$data['href'] = U($data['url']);
-            $data = $this->resultFormat($data);
-        }
-        return $datas;
-    }
-
-    //获取记录数
-    public function getCount($params = array())
-    {
-        $where = $this->geneWhere($params);
-        return $this->where($where)->count();
     }
 
     //插入更新格式化
@@ -138,32 +99,101 @@ class CommonModel extends Model
         return $data;
     }
 
+    //插入更新验证
+    protected function insertUpdateCheck($data)
+    {
+        $fields = $this->tableFields;
+        $rs = ['status' => 1, 'info' => ''];
+        foreach ($fields as $field) {
+            if ($field['weiyi']) {
+                $flag = $this->where([(string)$field['ziduanming_pinyin'] => $data[$field['ziduanming_pinyin']]])->find();
+                if (!$data['id']) { //insert
+                    if ($flag) {
+                        $rs['status'] = 0;
+                        $rs['info'] = $field['ziduanming'] . '要求唯一,和ID=' . $flag['id'] . '重复';
+                        return $rs;
+                    }
+                } else { //update
+                    if ($flag && $flag['id'] != $data['id']) {
+                        $rs['status'] = 0;
+                        $rs['info'] = $field['ziduanming'] . '要求唯一,和ID=' . $flag['id'] . '重复';
+                        return $rs;
+                    }
+                }
+            }
+        }
+        return $rs;
+    }
+
+    //查询一条记录
+    public function getOne($params)
+    {
+        if ($params['id']) {
+            $data = $this->find($params['id']);
+        } else if ($params['mingcheng']) {
+            $data = $this->where(['mingcheng' => $params['mingcheng']])->find();
+        } else if ($params['biaoti']) {
+            $data = $this->where(['biaoti' => $params['biaoti']])->find();
+        } else {
+            return [];
+        }
+        $data = $this->resultFormat($data);
+        return $data;
+    }
+
+    //查询多条记录
+    public function getAll($params = [])
+    {
+        $limit = $params['limit'] > 0 ? $params['limit'] : 20;
+        $page = $params['page'] > 0 ? ($params['page'] - 1) * $limit : -1;
+        $where = $this->geneWhere($params);
+        $order = $params['order'] ? $params['order'] : 'id desc';
+        $datas = $this->where($where)->order($order);
+        $datas = $page >= 0 ? $datas->limit($page, $limit)->select() : $datas->select();
+        foreach ($datas as &$data) {
+            $data = $this->resultFormat($data);
+        }
+        return $datas;
+    }
+
+    //获取记录数
+    public function getCount($params = array())
+    {
+        $where = $this->geneWhere($params);
+        return $this->where($where)->count();
+    }
+
     //添加
     public function insert($params)
     {
-        $rs = array('status' => 0, 'id' => 0, 'info' => '');
+        $table = $this->getTableName();
+        $rs = ['status' => 0, 'id' => 0, 'info' => ''];
         if (empty($params)) {
             $rs['info'] = '参数不能为空';
+            return $rs;
+        }
+        $flag = $this->insertUpdateCheck($params);
+        if (!$flag['status']) {
+            $rs['info'] = $flag['info'];
             return $rs;
         }
         $params = $this->insertUpdateFormat($params);
         $this->create($params);
         $id = $this->add();
         if (!$id) {
-            $rs['info'] = $this->getError();
-            return $rs;
+            $rs['info'] = "新增{$table}失败";
         } else {
-            $rs['status'] = 1;
-            $rs['id'] = $id;
-            $rs['info'] = '新增' . $params['url'];
-            return $rs;
+            $rs = ['status' => 1, 'id' => $id, 'info' => "新增{$table}成功"];
         }
+        insert_log(['manage_id' => manage_id(), 'table' => $table, 'table_id' => $id, 'biaoti' => $rs['info']]);
+        return $rs;
     }
 
     //编辑
     public function update($params)
     {
-        $rs = array('status' => 0, 'id' => 0, 'info' => '');
+        $table = $this->getTableName();
+        $rs = ['status' => 0, 'id' => 0, 'info' => ''];
         if (empty($params)) {
             $rs['info'] = '参数不能为空';
             return $rs;
@@ -171,35 +201,36 @@ class CommonModel extends Model
             $rs['info'] = 'id必须存在';
             return $rs;
         }
+        $flag = $this->insertUpdateCheck($params);
+        if (!$flag['status']) {
+            $rs['info'] = $flag['info'];
+            return $rs;
+        }
         $params = $this->insertUpdateFormat($params);
         $this->create($params);
         $status = $this->save();
         if (!$status) {
-            $rs['info'] = $this->getError();
-            return $rs;
+            $rs['info'] = "编辑{$table}失败";
         } else {
-            $rs['status'] = 1;
-            $rs['id'] = $params['id'];
-            $rs['info'] = '修改' . $params['url'];
-            return $rs;
+            $rs = ['status' => 1, 'id' => $params['id'], 'info' => "编辑{$table}成功"];
         }
+        insert_log(['manage_id' => manage_id(), 'table' => $table, 'table_id' => $params['id'], 'biaoti' => $rs['info']]);
+        return $rs;
     }
 
     //删除
     public function deleteOne($params)
     {
-        $rs = array('status' => 0, 'id' => 0, 'info' => '删除失败');
-        $data = array('deleted_at' => NOW_TIME, 'updated_at' => NOW_TIME);
-        $status = $this->where(array('id' => $params['id']))->save($data);
+        $table = $this->getTableName();
+        $rs = ['status' => 0, 'id' => 0, 'info' => ''];
+        $status = $this->where(array('id' => $params['id']))->save(['deleted_at' => NOW_TIME, 'updated_at' => NOW_TIME]);
         if (!$status) {
-            $rs['info'] = $this->getError();
-            return $rs;
+            $rs['info'] = "删除{$table}失败";
         } else {
-            $rs['status'] = 1;
-            $rs['id'] = $params['id'];
-            $rs['info'] = '删除成功';
-            return $rs;
+            $rs = ['status' => 1, 'id' => $params['id'], 'info' => "删除{$table}成功"];
         }
+        insert_log(['manage_id' => manage_id(), 'table' => $table, 'table_id' => $params['id'], 'biaoti' => $rs['info']]);
+        return $rs;
     }
 
     //关联表
@@ -210,7 +241,7 @@ class CommonModel extends Model
             if ($field['leixing'] == 'table') {
                 $table = $field['table'];
                 $model = biaoming2MVCname($table);
-                $rs[$table.'s'] = D('Admin/' . $model)->getAll();
+                $rs[$table] = D('Admin/' . $model)->getAll();
             }
         }
         return $rs;

@@ -50,10 +50,9 @@ function data_auth_sign($data)
 //判断管理员是是否登录
 //管理员已登录返回管理员ID
 //管理员未登录返回0
-function is_manage()
+function manage_id()
 {
     $s = session('manage_auth');
-    print_r($s);
     return session('manage_auth_sign') == data_auth_sign($s) ? $s['id'] : 0;
 }
 
@@ -62,3 +61,10 @@ function has_permission($action)
 {
     return 1;
 }
+
+//记录操作日志
+function insert_log($params)
+{
+    D('Admin/Log')->insert($params);
+}
+

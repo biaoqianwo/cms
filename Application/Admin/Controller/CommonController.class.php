@@ -9,32 +9,36 @@ class CommonController extends Controller
     //初始化
     public function _initialize()
     {
-        define('AID', is_manage());
-        if (!AID) {
+        $c = CONTROLLER_NAME; //控制器名Common/Product/ProductCate
+        define('MID', manage_id());
+        if (!MID) {
             $this->error('请先登陆', U('Public/login'));
         }
-        $admin = D('Admin/Manage')->getOne(array('id' => AID));
-        print_r($admin);
+        $admin = D('Admin/Manage')->getOne(array('id' => MID));
         $this->assign('manage_auth', $admin);
         $permissions = explode(',', $admin['cate']['permissions']);
-        $action = CONTROLLER_NAME . "/" . ACTION_NAME;
-        if (!in_array($action, $permissions) && AID != 1) {
+        $action = $c . "/" . ACTION_NAME;
+        if (!in_array($action, $permissions) && MID != 1) {
             $this->error('没有权限', U('Index/index'));
         }
 
         //关联表
-        if(CONTROLLER_NAME != 'Index'){
-            $relations = D('Admin/' . CONTROLLER_NAME)->relationTable();
+        if ($c != 'Index') {
+            $relations = D('Admin/' . $c)->relationTable();
+            //print_r($relations);
             foreach ($relations as $k => $v) {
+                if ($c == biaoming2MVCname($k)) { //自己关联自己
+                    $v = array_merge([['id' => 0, 'mingcheng' => '根']], D('Admin/Tree')->toFormatTree($v, 'mingcheng'));
+                }
                 $this->assign($k, $v);
             }
         }
+
     }
 
 
     public function index()
     {
-
         $limit = 20;
         $params = array('page' => I('p', 1), 'limit' => $limit);
 
@@ -108,7 +112,7 @@ class CommonController extends Controller
         $upload = new \Think\Upload();
         $upload->rootPath = './Public/Uploads';
         $upload->savePath = $dir;
-        $upload->saveName = date('YmdHis') . mt_rand(1000, 9999) . AID;
+        $upload->saveName = date('YmdHis') . mt_rand(1000, 9999) . MID;
         $upload->autoSub = false;
         $info = $upload->uploadOne($_FILES['file']);
         echo !empty($info['savename']) ? $info['savename'] : '';
@@ -130,7 +134,7 @@ class CommonController extends Controller
     public function uploadAttachment()
     {
         $dir = './Public/Uploads/Attachment/';
-        $savename = date('YmdHis') . mt_rand(1, 9) . AID;
+        $savename = date('YmdHis') . mt_rand(1, 9) . MID;
         $name = $_FILES['file']['name'];
         $upload = new \Think\Upload();
         $upload->rootPath = $dir;
@@ -151,7 +155,7 @@ class CommonController extends Controller
             $zip->close();
             @unlink($dir . $info['savename']);
         }
-        $data = array('aid' => AID, 'name' => $name, 'savename' => $info['ext'] == 'zip' ? $savename : $savename . '.' . $info['ext'], 'ext' => $info['ext']);
+        $data = array('MID' => MID, 'name' => $name, 'savename' => $info['ext'] == 'zip' ? $savename : $savename . '.' . $info['ext'], 'ext' => $info['ext']);
         echo D('Admin/Attachment')->update($data);
     }
 

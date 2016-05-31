@@ -15,6 +15,7 @@ class TableFieldController extends Controller
     {
         if (IS_POST) {
             $data = I('post.');
+            //print_r($data);die;
             $rs = D('Admin/TableField')->insert($data);
             if ($rs['status']) {
                 $this->redirect('TableField/add', ['table_biaoming' => $data['table_biaoming']]);
@@ -27,8 +28,8 @@ class TableFieldController extends Controller
                 $this->error('table_biaoming不能为空');
             }
             $data = D('Admin/Table')->getOne(['biaoming' => $table_biaoming]);
+            $data['tables'] = D('Admin/Table')->getAll();
             $this->assign('data', $data);
-            $this->assign('tables', D('Admin/Table')->getAll());
             $this->display();
         }
     }
@@ -52,9 +53,8 @@ class TableFieldController extends Controller
             $field = D('Admin/TableField')->find($id);
             $data = D('Admin/Table')->getOne(['biaoming' => $field['table_biaoming']]);
             $data['field'] = $field;
+            $data['tables'] = D('Admin/Table')->getAll();
             $this->assign('data', $data);
-
-            $this->assign('tables', D('Admin/Table')->getAll());
 
             $this->display();
         }

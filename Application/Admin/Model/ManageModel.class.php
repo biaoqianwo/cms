@@ -4,17 +4,12 @@ namespace Admin\Model;
 
 use Think\Model;
 
-
 class ManageModel extends CommonModel
 {
-    protected $_auto = array(
-        array('created_at', NOW_TIME, self::MODEL_INSERT),
-        array('update_at', NOW_TIME, self::MODEL_BOTH),
-    );
 
     public function login($name, $pwd)
     {
-        $rs = array('status' => 0, 'id' => 0, 'info' => '');
+        $rs = ['status' => 0, 'id' => 0, 'info' => ''];
         if (!$name) {
             $rs['info'] = '用户名/邮箱/手机号码必须';
             return $rs;
@@ -26,7 +21,7 @@ class ManageModel extends CommonModel
         if ($model) {
             if (think_md5($pwd) == $model['pwd']) {
                 $this->autoLogin($model);
-                return $model['id'];
+                return $rs = ['status' => 1, 'id' => $model['id'], 'info' => '登录成功'];
             } else {
                 $rs['info'] = '密码不正确';
                 return $rs;
@@ -58,16 +53,6 @@ class ManageModel extends CommonModel
     {
         session('manage_auth', null);
         session('manage_auth_sign', null);
-    }
-
-    public function getOne($params = array())
-    {
-        $data = [];
-        if ($params['id']) {
-            $data = $this->find($params['id']);
-        }
-        //$data['role'] = D('Admin/Role')->getOne(array('code' => $data['role_code']));
-        return $data;
     }
 
     public function insert($params)
@@ -161,7 +146,7 @@ class ManageModel extends CommonModel
         }
     }
 
-
+    //修改密码
     public function pwd($params)
     {
         $rs = array('status' => 0, 'info' => '');
@@ -183,14 +168,14 @@ class ManageModel extends CommonModel
         return $rs;
     }
 
-
+    //修改资料
     public function info($params)
     {
         $status = $this->where(array('id' => AID))->save(['email' => $params['email'], 'mobile' => $params['mobile'], 'update_at' => NOW_TIME]);
         return array('status' => $status ? 1 : 0, 'info' => $status ? '成功' : '失败');
     }
 
-
+    //重置密码
     public function resetpwd($id)
     {
         $status = $this->where(array('id' => $id))->save(array('pwd' => think_md5('1234'), 'update_at' => NOW_TIME));

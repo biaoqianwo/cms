@@ -10,19 +10,18 @@
     <link href="__PUBLIC__/admin/admin.css" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#daohang"
+                    aria-expanded="false">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{:U('Index/index')}">后台</a>
+            <a class="navbar-brand" href="{:U('Index/index')}">主面板</a>
         </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse" id="daohang">
             <ul class="nav navbar-nav">
                 <volist name="admin_auth.caidans" id="vo">
                     <li class="dropdown">
@@ -38,7 +37,7 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{:U('Message/index')}">消息</a></li>
+                <li><a href="{:U('Message/index')}">消息 <span class="badge">4</span></a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">{$manage_auth.name} <span class="caret"></span></a>

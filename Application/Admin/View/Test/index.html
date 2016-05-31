@@ -8,12 +8,15 @@
 <block name="main">
     <form class="form-inline" method="post">
         <div class="form-group">
+            <input class="form-control" placeholder="主键ID" name="id" value="{$select.id}">
+        </div>
+        <div class="form-group">
             <input class="form-control" placeholder="字符串" name="zifuchuan" value="{$select.zifuchuan}">
         </div>
         <div class="form-group">
             <select name="manage_code" class="form-control">
                 <option value="">--选择--</option>
-                <volist name="manages" id="vo">
+                <volist name="manage" id="vo">
                     <option value="{$vo.code}"
                     <eq name="vo.code" value="$select.manage_code">selected</eq>
                     >{$vo.code}</option>

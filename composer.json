@@ -1,14 +1,14 @@
 {
-    "name": "topthink/thinkphp",
-    "description": "the ThinkPHP Framework",
+    "name": "biaoqianwo/cms",
+    "description": "Common Manage System",
     "type": "framework",
-    "keywords": ["framework","thinkphp","ORM"],
-    "homepage": "http://thinkphp.cn/",
+    "keywords": ["framework","thinkphp","CMS"],
+    "homepage": "http://biaoqianwo.com/cms",
     "license": "Apache2",
     "authors": [
         {
-            "name": "liu21st",
-            "email": "liu21st@gmail.com"
+            "name": "allen",
+            "email": "2732917533@qq.com"
         }
     ],
     "require": {

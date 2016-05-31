@@ -11,6 +11,78 @@ class TableFieldModel extends Model
         array('updated_at', NOW_TIME, self::MODEL_BOTH),
     );
 
+    //设置缓存
+    protected function setCache($params)
+    {
+        $data = D('Admin/TableField')->where(['table_biaoming' => $params['table_biaoming']])->select();
+        S('tablefield_' . $params['table_biaoming'], $data);
+    }
+
+    //新增字段
+    protected function newfield($params)
+    {
+        $table = C('DB_PREFIX') . $params['table_biaoming'];
+        $field = $params['ziduanming_pinyin'];
+        $comment = $params['ziduanming'];
+        $bitian = !empty($params['bitian']) ? 'NOT NULL' : 'NULL';
+        switch ($params['leixing']) {
+            case 'char':
+                $sql = "ALTER TABLE `{$table}` ADD COLUMN `{$field}` VARCHAR(50) {$bitian} COMMENT '{$comment}';";
+                break;
+            case 'int':
+            case 'date':
+            case 'table':
+                $sql = "ALTER TABLE `{$table}` ADD COLUMN `{$field}` INT(11) {$bitian} DEFAULT '0' COMMENT '{$comment}';";
+                break;
+            case 'text':
+                $sql = "ALTER TABLE `{$table}` ADD COLUMN `{$field}` TEXT {$bitian} COMMENT '{$comment}';";
+                break;
+            case 'longtext':
+                $sql = "ALTER TABLE `{$table}` ADD COLUMN `{$field}` LONGTEXT {$bitian} COMMENT '{$comment}';";
+                break;
+            default:
+                $sql = "";
+        }
+        $this->execute($sql);
+    }
+
+    //更新View
+    protected function updateView($params)
+    {
+        $fields = $this->getAll(['table_biaoming' => $params['table_biaoming']]);
+        $str = ' <form data-toggle="validator" method="post" class="form-horizontal">';
+        foreach ($fields as $field) {
+            switch ($field['leixing']) {
+                case 'char':
+                    $str .= '<div class="form-group"><label class="col-sm-2 control-label">' . $field['ziduanming'] . '*</label><div class="col-sm-10"><input type="text" class="form-control" name="' . quanpin($field['ziduanming']) . '" placeholder="' . $field['ziduanming'] . '" required></div></div>';
+            }
+        }
+        $str .= <<< eod
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary btn-block">提交</button>
+            </div>
+        </div>
+    </form>
+eod;
+        $name = biaoming2MVCname($params['table_biaoming']);
+        $html = file_get_contents(APP_PATH . C('DEFAULT_MODULE') . '/View/' . $name . '/add.html');
+        $old = <<< eod
+<a href="{:U('TableField/add',array('table_biaoming'=>ZZZ))}">添加字段</a>
+eod;
+        $old = str_replace('ZZZ', $params['table_biaoming'], $old);
+        $html = str_replace($old, $str, $html);
+        file_put_contents(APP_PATH . C('DEFAULT_MODULE') . '/View/' . $name . '/add.html', $html);
+        //index.html
+
+        //add.html
+
+        //edit.html
+
+
+    }
+
+
     public function getOne($params = [])
     {
         if ($params['id']) {
@@ -72,18 +144,21 @@ class TableFieldModel extends Model
             $rs['info'] = '参数不能为空';
             return $rs;
         }
+        $ziduanming_pinyin = quanpin($params['ziduanming']);
+        $params['ziduanming_pinyin'] = $ziduanming_pinyin ? $ziduanming_pinyin : $params['ziduanming'];
         if ($params['leixing'] == 'table') {
             if (!$params['table']) {
                 $rs['info'] = '关联表类型时必须选择表';
                 return $rs;
             }
-            $params['ziduanming_pinyin'] = $params['table'] . '_code';
-        } else {
-            $params['ziduanming_pinyin'] = quanpin($params['ziduanming']);
+            $params['ziduanming_pinyin'] = $params['table'] . '_id';
+            if ($params['table_biaoming'] == $params['table']) {
+                $params['ziduanming_pinyin'] = 'parent_id'; //自己和自己关联
+            }
         }
         $flag = D('Admin/TableField')->where(['table_biaoming' => $params['table_biaoming'], 'ziduanming_pinyin' => $params['ziduanming_pinyin']])->find();
         if ($flag) {
-            $rs['info'] = '字段名pinyin已经存在';
+            $rs['info'] = '字段名pinyin(' . $params['ziduanming_pinyin'] . ')已经存在';
             return $rs;
         }
         $this->create($params);
@@ -98,75 +173,11 @@ class TableFieldModel extends Model
 
             $this->newfield($params);
             $this->updateView($params);
+            $this->setCache($params);
 
             return $rs;
         }
     }
-
-    //新增字段
-    protected function newfield($params)
-    {
-        $table = C('DB_PREFIX') . $params['table_biaoming'];
-        $field = $params['ziduanming_pinyin'];
-        $comment = $params['ziduanming'];
-        $bitian = !empty($params['bitian']) ? 'NOT NULL' : 'NULL';
-        switch ($params['leixing']) {
-            case 'char':
-            case 'table':
-                $sql = "ALTER TABLE `{$table}` ADD COLUMN `{$field}` VARCHAR(50) {$bitian} COMMENT '{$comment}';";
-                break;
-            case 'int':
-            case 'date':
-                $sql = "ALTER TABLE `{$table}` ADD COLUMN `{$field}` INT(11) {$bitian} DEFAULT '0' COMMENT '{$comment}';";
-                break;
-            case 'text':
-                $sql = "ALTER TABLE `{$table}` ADD COLUMN `{$field}` TEXT {$bitian} COMMENT '{$comment}';";
-                break;
-            case 'longtext':
-                $sql = "ALTER TABLE `{$table}` ADD COLUMN `{$field}` LONGTEXT {$bitian} COMMENT '{$comment}';";
-                break;
-            default:
-                $sql = "";
-        }
-        $this->execute($sql);
-    }
-
-    //更新MVC
-    protected function updateView($params)
-    {
-        $fields = $this->getAll(['table_biaoming' => $params['table_biaoming']]);
-        $str = ' <form data-toggle="validator" method="post" class="form-horizontal">';
-        foreach ($fields as $field) {
-            switch ($field['leixing']) {
-                case 'char':
-                    $str .= '<div class="form-group"><label class="col-sm-2 control-label">' . $field['ziduanming'] . '*</label><div class="col-sm-10"><input type="text" class="form-control" name="' . quanpin($field['ziduanming']) . '" placeholder="' . $field['ziduanming'] . '" required></div></div>';
-            }
-        }
-        $str .= <<< eod
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary btn-block">提交</button>
-            </div>
-        </div>
-    </form>
-eod;
-        $name = biaoming2MVCname($params['table_biaoming']);
-        $html = file_get_contents(APP_PATH . C('DEFAULT_MODULE') . '/View/' . $name . '/add.html');
-        $old = <<< eod
-<a href="{:U('TableField/add',array('table_biaoming'=>ZZZ))}">添加字段</a>
-eod;
-        $old = str_replace('ZZZ', $params['table_biaoming'], $old);
-        $html = str_replace($old, $str, $html);
-        file_put_contents(APP_PATH . C('DEFAULT_MODULE') . '/View/' . $name . '/add.html', $html);
-        //index.html
-
-        //add.html
-
-        //edit.html
-
-
-    }
-
 
     //编辑
     public function update($params)

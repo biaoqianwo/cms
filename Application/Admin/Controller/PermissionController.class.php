@@ -3,16 +3,10 @@ namespace Admin\Controller;
 
 use Think\Controller;
 
-class PermissionController extends Controller
+class PermissionController extends CommonController
 {
-    public function index()
-    {
-        $datas = D('Admin/' . CONTROLLER_NAME)->getAll();
-        $this->assign('datas', $datas);
-        $this->display();
-    }
 
-    public function add()
+   /* public function add()
     {
         if (IS_POST) {
             $data = I('post.');
@@ -23,9 +17,9 @@ class PermissionController extends Controller
                 $this->error($rs['info']);
             }
         } else {
-            $datas = D('Admin/' . CONTROLLER_NAME)->getAll();
-            $datas = array_merge([['id' => 0, 'mingcheng' => '根']], $datas);
-            $this->assign('datas', $datas);
+            $permission = D('Admin/' . CONTROLLER_NAME)->getAll();
+            $permission = array_merge([['id' => 0, 'mingcheng' => '根']], D('Admin/Tree')->toFormatTree($permission, 'mingcheng'));
+            $this->assign('permission', $permission);
             $this->display();
         }
     }
@@ -41,9 +35,9 @@ class PermissionController extends Controller
                 $this->error($rs['info']);
             }
         } else {
-            $datas = D('Admin/' . CONTROLLER_NAME)->getAll();
-            $datas = array_merge([['id' => 0, 'mingcheng' => '根']], $datas);
-            $this->assign('datas', $datas);
+            $permission = D('Admin/' . CONTROLLER_NAME)->getAll();
+            $permission = array_merge([['id' => 0, 'mingcheng' => '根']], D('Admin/Tree')->toFormatTree($permission, 'mingcheng'));
+            $this->assign('permission', $permission);
 
             $id = I('id', 0);
             $data = D('Admin/' . CONTROLLER_NAME)->getOne(['id' => $id]);
@@ -56,6 +50,6 @@ class PermissionController extends Controller
     {
         $id = I("id", 0);
         $this->ajaxReturn(D('Admin/' . CONTROLLER_NAME)->deleteOne(['id' => $id]));
-    }
+    }*/
 
 }

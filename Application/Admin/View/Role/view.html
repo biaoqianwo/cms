@@ -1,0 +1,41 @@
+<extend name="Public:front"/>
+<block name="mianbaoxie">
+    <li><a href="{:U('Role/index')}">角色</a></li>
+    <p class="pull-right"><a href="javascript:d.openAll();">全部展开</a> | <a href="javascript:d.closeAll();">全部收齐</a></p>
+</block>
+<block name="main">
+    <script src="__PUBLIC__/common/dtree/dtree.js"></script>
+    <form data-toggle="validator" method="post" class="form-horizontal" enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">名称*</label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="mingcheng" placeholder="输入名称" readonly value="{$data.mingcheng}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">权限</label>
+
+            <div class="col-sm-10">
+                <script type="text/javascript">
+                    var img_url = '__PUBLIC__/common/dtree/';
+                    ps = eval('{$permission|json_encode}');
+                    d = new dTree('d');
+                    d.add(0, -1, '权限管理');
+                    //节点ID，父类ID，chechbox名称，chechbox值，chechbox显示名称，chechbox是否被选中：默认不选，disabled是否可用，默认是可用
+                    for (i = 0; i < ps.length; i++) {
+                        d.add(ps[i].id, ps[i].parent_id , 'permissions', ps[i].url, ps[i].mingcheng, ps[i].checked, 1);
+                    }
+                    document.write(d);
+                    d.openAll();
+                </script>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <a href="{:U('Role/index')}" class="btn btn-primary btn-block">返回列表</a>
+            </div>
+        </div>
+    </form>
+
+</block>

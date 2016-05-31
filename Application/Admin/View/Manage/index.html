@@ -6,5 +6,58 @@
     </if>
 </block>
 <block name="main">
-    <a href="{:U('TableField/add',array('table_id'=>1))}">添加字段</a>
+    <form class="form-inline" method="post">
+        <div class="form-group">
+            <input type="text" class="form-control" name="name" size="20" placeholder="用户名" value="{$kw}"/>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="email" size="20" placeholder="邮箱" value="{$kw}"/>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="mobile" size="20" placeholder="手机号码" value="{$kw}"/>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">查询</button>
+        </div>
+    </form>
+    <div class="margin-bottom"></div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>用户名</th>
+                <th>邮箱</th>
+                <th>手机号码</th>
+                <th>角色</th>
+                <th>登陆次数</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="datas" id="vo">
+                <tr>
+                    <td>{$vo.name}</td>
+                    <td>{$vo.email}</td>
+                    <td>{$vo.mobile}</td>
+                    <td>{$vo.role_id}</td>
+                    <td>{$vo.login_count}</td>
+                    <td>
+                        <if condition="has_permission('Manage/edit')">
+                            <a href="{:U('Manage/edit',array('id'=>$vo['id']))}">编辑</a>
+                        </if>
+                        <if condition="has_permission('Manage/delete')">
+                            <a class="ajax-get confirm no-refresh"
+                               href="{:U('Manage/delete',array('id'=>$vo['id']))}" remove="tr">删除</a>
+                        </if>
+                        <if condition="has_permission('Manage/resetpwd')">
+                            <a class="ajax-get confirm no-refresh"
+                               href="{:U('Manage/resetpwd',array('id'=>$vo['id']))}">重置密码</a>
+                        </if>
+                    </td>
+                </tr>
+            </volist>
+            </tbody>
+        </table>
+    </div>
+    <div class="pull-right"> {$_page}</div>
 </block>

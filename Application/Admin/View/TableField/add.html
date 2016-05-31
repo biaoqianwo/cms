@@ -10,6 +10,7 @@
             <tr>
                 <th>字段名</th>
                 <th>类型</th>
+                <th>唯一</th>
                 <th>必填</th>
                 <th>查询显示</th>
                 <th>列表显示</th>
@@ -21,9 +22,18 @@
                 <tr>
                     <td>{$vo.ziduanming}({$vo.ziduanming_pinyin})</td>
                     <td>{$vo.leixing}</td>
-                    <td><eq name="vo.bitian" value="1">是</eq></td>
-                    <td><eq name="vo.chaxunxianshi" value="1">是</eq></td>
-                    <td><eq name="vo.liebiaoxianshi" value="1">是</eq></td>
+                    <td>
+                        <eq name="vo.weiyi" value="1">是</eq>
+                    </td>
+                    <td>
+                        <eq name="vo.bitian" value="1">是</eq>
+                    </td>
+                    <td>
+                        <eq name="vo.chaxunxianshi" value="1">是</eq>
+                    </td>
+                    <td>
+                        <eq name="vo.liebiaoxianshi" value="1">是</eq>
+                    </td>
                     <td>
                         <if condition="has_permission('TableField/edit')">
                             <a href="{:U('TableField/edit',array('id'=>$vo['id']))}">编辑</a>
@@ -39,7 +49,7 @@
         </table>
     </div>
 
-    <form data-toggle="validator" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <form data-toggle="validator" method="post" class="form-horizontal">
         <div class="form-group">
             <label class="col-sm-2 control-label">字段名*</label>
 
@@ -67,14 +77,24 @@
 
             <div class="col-sm-10">
                 <select class="form-control" name="table">
-                    <option value="">选择表</option>
-                    <volist name="tables" id="vo">
+                    <option value="" selected>选择表</option>
+                    <volist name="data.tables" id="vo">
                         <option value="{$vo.biaoming}">{$vo.mingcheng}</option>
                     </volist>
                 </select>
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">唯一</label>
 
+            <div class="col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="weiyi">是
+                    </label>
+                </div>
+            </div>
+        </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">必填</label>
 
@@ -93,7 +113,7 @@
             <div class="col-sm-10">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="chaxunxianshi" checked>是
+                        <input type="checkbox" name="chaxunxianshi">是
                     </label>
                 </div>
             </div>

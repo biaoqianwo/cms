@@ -1,0 +1,110 @@
+<extend name="Public:front"/>
+<block name="mianbaoxie">
+    <li>技术支持</li>
+</block>
+<block name="main">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading1">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse1"
+                       aria-expanded="true" aria-controls="collapse1">概述</a>
+                </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading1">
+                <div class="panel-body">
+                    <p>本系统集成了内容管理系统(CMS)、企业官网、商城系统(Shop)等功能，根据您的业务不同，可以方便的选择</p>
+
+                    <p>1主题自定义</p>
+
+                    <p>2基于角色的权限系统,不同的管理员看到的菜单不同</p>
+
+                    <p>3前台导航条自定义</p>
+
+                    <p>4内容管理：文档内置了文章、帖子、活动、实体、专题、单页、友链7个列表模板，文章、帖子、活动、实体、单页5个详情模板，基本满足您对文档的全部需求</p>
+
+                    <p>5商城管理：基本满足您对商城的全部需求。且售后、报表一应俱全</p>
+
+                    <p>6期待更多的功能...</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading2">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse2"
+                       aria-expanded="false" aria-controls="collapse2"> 基础设置</a>
+                </h4>
+            </div>
+            <div id="collapse2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading2">
+                <div class="panel-body">
+                    <p>设置是第一步：</p>
+
+                    <p>在您使用之前，已经为您内置了一些配置，如果您不熟悉本系统，就不用关心。如果您熟悉系统，可以自行修改：<a
+                            href="{:U('Config/Manage')}">功能开关</a></p>
+
+                    <p>您需要设置的有<a href="{:U('Config/site')}">网站设置</a> <a href="{:U('Config/com')}">公司设置</a> 还可以进行<a
+                            href="{:U('ManageCate/index')}">角色管理</a> <a href="{:U('Manage/index')}">管理员管理</a>
+
+                    <p>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading3">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse3"
+                       aria-expanded="false" aria-controls="collapse3">内容管理</a>
+                </h4>
+            </div>
+            <div id="collapse3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading3">
+                <div class="panel-body">
+                    <p>如果您的需求是内容管理系统CMS，这是您最常用的操作：</p>
+
+                    <p>1开始<a href="{:U('Document/index')}">文档</a>（包括文章）之前，您可以先进行<a href="{:U('DocumentCate/index')}">分类管理</a>
+                        <a href="{:U('DocumenTag/index')}">标签管理</a>
+
+                    <p>
+
+                    <p>2当文档分类和标签管理好之后，就可以进行<a href="{:U('Document/add')}">文档添加</a>了。
+                    </p>
+
+                    <p>3还可以在<a href="{:U('DocumentAct/index')}">文档行为</a>里面看到活动的报名信息，以及用户喜欢文档的信息。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading4">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse4"
+                       aria-expanded="false" aria-controls="collapse4">商城管理</a>
+                </h4>
+            </div>
+            <div id="collapse4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading4">
+                <div class="panel-body">
+                    <p>如果您的需求是商城系统，这是您最常用的操作：</p>
+
+                    <p>1先进行<a href="{:U('ProductCate/index')}">分类管理</a>，就可以进行<a href="{:U('Product/add')}">商品添加</a></p>
+
+                    <p>2商城离不了<a href="{:U('Order/index')}">订单管理</a> <a href="{:U('Aftersale/index')}">售后管理</a> <a
+                            href="{:U('AftersaleCate/index')}">售后分类</a></p>
+
+                    <p>3如果您的商品很多，且存在比较相近的，可以使用复制商品的功能。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="well">
+
+        <p>技术和后期维护的问题请联系我们</p>
+
+        <p>QQ: 2732917533 </p>
+
+        <p>Tel: 187-8298-8780</p>
+
+        <p><a class="btn btn-primary " href="http://www.biaoqianwo.com" role="button" target="_blank">我们的网站</a>
+        </p>
+    </div>
+</block>
