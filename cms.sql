@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `cms_permission` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='权限';
 
--- 正在导出表  cms.cms_permission 的数据：~6 rows (大约)
+-- 正在导出表  cms.cms_permission 的数据：~7 rows (大约)
 DELETE FROM `cms_permission`;
 /*!40000 ALTER TABLE `cms_permission` DISABLE KEYS */;
 INSERT INTO `cms_permission` (`id`, `created_at`, `updated_at`, `deleted_at`, `parent_id`, `mingcheng`, `url`, `paixu`, `caidanxianshi`, `quanxianxianshi`) VALUES
@@ -141,9 +141,9 @@ CREATE TABLE IF NOT EXISTS `cms_table` (
   `updated_at` int(11) NOT NULL DEFAULT '0',
   `deleted_at` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='模型表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='模型表';
 
--- 正在导出表  cms.cms_table 的数据：~1 rows (大约)
+-- 正在导出表  cms.cms_table 的数据：~0 rows (大约)
 DELETE FROM `cms_table`;
 /*!40000 ALTER TABLE `cms_table` DISABLE KEYS */;
 INSERT INTO `cms_table` (`id`, `mingcheng`, `biaoming`, `created_at`, `updated_at`, `deleted_at`) VALUES
